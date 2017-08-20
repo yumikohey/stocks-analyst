@@ -2,7 +2,7 @@ namespace :historical_data do
   desc "Collect historical data"
   task collect_historical_data: :environment do
 	require 'nokogiri'
-	stocks = Stock.where(stock_exchange:'nasdaq')
+	stocks = Stock.all
 	stocks.each do |stock|
 		symbol = stock.symbol
 		url = "https://finance.yahoo.com/quote/#{symbol}/history?period1=1495170000&period2=1503118800&interval=1d&filter=history&frequency=1d"
@@ -48,6 +48,9 @@ namespace :historical_data do
 						f.puts "****************"
 					}
 				end
+				open('entries.txt', 'a') { |f|
+					f.puts "#{symbol}"
+				}
 			end
 		rescue => e
 			open('error.log', 'a') { |f|
