@@ -1,0 +1,37 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  form_type: MyString
+  file_number: MyString
+  film_number: MyString
+  description: MyString
+  name_of_issue: MyString
+  title_of_class: MyString
+  cusip: MyString
+  value: 1
+  shares_or_principle_amt: 1
+  shares_or_principle: MyString
+  put_or_call: MyString
+  investment_desc: MyString
+  other_manager: MyString
+  sole_number: 1
+  shared_number: 1
+  none_number: 1
+
+two:
+  form_type: MyString
+  file_number: MyString
+  film_number: MyString
+  description: MyString
+  name_of_issue: MyString
+  title_of_class: MyString
+  cusip: MyString
+  value: 1
+  shares_or_principle_amt: 1
+  shares_or_principle: MyString
+  put_or_call: MyString
+  investment_desc: MyString
+  other_manager: MyString
+  sole_number: 1
+  shared_number: 1
+  none_number: 1

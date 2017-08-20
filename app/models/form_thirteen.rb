@@ -1,0 +1,2 @@
+class FormThirteen < ApplicationRecord
+end

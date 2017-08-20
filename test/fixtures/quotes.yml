@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  symbol: MyString
+  date: 2017-08-19
+  open: 1.5
+  high: 1.5
+  low: 1.5
+  close: 1.5
+  volume: 1
+
+two:
+  symbol: MyString
+  date: 2017-08-19
+  open: 1.5
+  high: 1.5
+  low: 1.5
+  close: 1.5
+  volume: 1
