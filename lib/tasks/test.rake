@@ -7,7 +7,7 @@ namespace :test do
 			}
 		end
 		require 'aws-sdk'
-  		s3 = Aws::S3::Resource.new(region: 'us-west-1')
+  	s3 = Aws::S3::Resource.new(region: 'us-west-1')
 		File.open(Rails.root.join('test.txt'), 'r') do |file|
 	  		obj = s3.bucket('stocks-analyst-data').object('test')
 			obj.upload_file(file)
