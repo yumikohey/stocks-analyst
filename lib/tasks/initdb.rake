@@ -53,7 +53,6 @@ namespace :initdb do
   		count += 1
   		puts symbol, count
 	end
-
   end
 
 end
