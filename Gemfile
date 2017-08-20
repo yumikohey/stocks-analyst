@@ -34,6 +34,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'yahoo-finance'
 gem 'aws-sdk', '~> 2'
 gem 'dotenv-rails'
+gem 'whenever', :require => false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
