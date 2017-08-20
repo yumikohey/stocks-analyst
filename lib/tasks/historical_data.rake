@@ -7,7 +7,7 @@ namespace :historical_data do
 			symbol = stock.symbol
 			check_quote = Quote.where(symbol:symbol, date:'2017-05-19')
 			if check_quote.length === 1
-				puts "#{symbol}, #{date} written in DB already"
+				puts "#{symbol} is already written in DB already"
 			else
 				begin
 					url = "https://finance.yahoo.com/quote/#{symbol}/history?period1=1495170000&period2=1503118800&interval=1d&filter=history&frequency=1d"				
