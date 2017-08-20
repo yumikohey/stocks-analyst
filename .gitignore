@@ -23,7 +23,6 @@
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 .env
-lib/assets/data
 stocks_development
 *.log
 *.txt
