@@ -24,3 +24,4 @@
 !.elasticbeanstalk/*.global.yml
 .env
 lib/assets/data
+stocks_development
