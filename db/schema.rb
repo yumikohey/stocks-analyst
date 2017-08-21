@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170820040225) do
+ActiveRecord::Schema.define(version: 20170821065524) do
 
   create_table "form_thirteens", force: :cascade do |t|
     t.string "form_type"
@@ -31,7 +31,18 @@ ActiveRecord::Schema.define(version: 20170820040225) do
     t.integer "none_number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "filed_date"
     t.index ["cusip"], name: "index_form_thirteens_on_cusip"
+  end
+
+  create_table "institutions", force: :cascade do |t|
+    t.string "name"
+    t.string "state"
+    t.string "address"
+    t.string "file_number"
+    t.string "cik"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "posts", force: :cascade do |t|

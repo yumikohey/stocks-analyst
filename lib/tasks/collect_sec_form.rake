@@ -1,0 +1,56 @@
+namespace :collect_sec_form do
+  desc "Collect 13F-HR forms"
+  task thirteen_form: :environment do
+    host = "https://www.sec.gov/"
+    url = "https://www.sec.gov/cgi-bin/srch-edgar?text=13F-HR&start=1&count=80&first=2017&last=2017https://www.sec.gov/cgi-bin/srch-edgar?text=13F-HR&start=1&count=80&first=2017&last=2017"				
+    page = Nokogiri::HTML(open(url))
+    table = page.css("div > table")
+    count = table.css('tr').length
+    if count > 2
+      (1..count-1).each do |idx|
+        company_name = ((table.css('tr')[idx]).css('td')[1]).css('a').text
+        text_url = ((table.css('tr')[idx]).css('td')[2]).css('a')[1]['href']
+        filed_date = Date.strptime(((table.css('tr')[idx]).css('td')[4]).text, "%m/%d/%Y")
+        sub_page = Nokogiri::HTML(open(host+text_url))
+        second_table = sub_page.css("#contentDiv #formDiv")[1]
+        company_identity = sub_page.css('#filerDiv')
+        cik = company_identity.css('.companyName a').text.split(' (see')[0]
+        file_number =  company_identity.css('.identInfo a strong').text
+        state = (company_identity.css('.identInfo strong')[1]).text
+        address = (company_identity.css('.mailer')[1]).css('.mailerAddress').text.split(" ").join(" ")
+        saved_institution = Institution.where(cik:cik)
+        if saved_institution.length == 0
+          institution = Institution.new(name: company_name, cik:cik, file_number:file_number, state:state, address: address)
+          institution.save!
+          puts institution.name
+        end
+        form_html = ((second_table.css('tr')[3]).css('td')[2]).css('a')[0]['href']
+        form_page = Nokogiri::HTML(open(host+form_html))
+        form_table = form_page.css("table")[3]
+        items_count = form_table.css("tr").length
+        if items_count > 3
+          (3..items_count-1).each do |row|
+            issuer = (form_table.css("tr")[row]).css("td")[0].text
+            title_class = (form_table.css("tr")[row]).css("td")[1].text
+            cusip = (form_table.css("tr")[row]).css("td")[2].text
+            value = (form_table.css("tr")[row]).css("td")[3].text.tr(',', '').to_i
+            shares_or_principle_number = (form_table.css("tr")[row]).css("td")[4].text.tr(',', '').to_i
+            shares_or_principle = (form_table.css("tr")[row]).css('td')[5].text
+            put_or_call = (form_table.css("tr")[row]).css("td")[6].text
+            investment_discretion = (form_table.css("tr")[row]).css("td")[7].text
+            other_manager = (form_table.css("tr")[row]).css("td")[8].text
+            sole = (form_table.css("tr")[row]).css("td")[9].text.tr(',', '').to_i
+            shared = (form_table.css("tr")[row]).css("td")[10].text.tr(',', '').to_i
+            none = (form_table.css("tr")[row]).css("td")[11].text.tr(',', '').to_i
+            form = FormThirteen.new(filed_date:filed_date, form_type: "13F-HR", file_number: file_number, name_of_issue: issuer, title_of_class: title_class, cusip:cusip, value:value, shares_or_principle_amt: shares_or_principle_number, shares_or_principle:shares_or_principle, put_or_call:put_or_call, investment_desc:investment_discretion, other_manager:other_manager,sole_number:sole, shared_number:shared, none_number:none)
+            form.save!
+          end
+        end
+
+      end
+
+    end
+
+  end
+
+end
