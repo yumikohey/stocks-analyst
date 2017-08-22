@@ -6,6 +6,8 @@ namespace :collect_sec_form do
     page = Nokogiri::HTML(open(url))
     table = page.css("div > table")
     count = table.css('tr').length
+    new_institution_count = 0
+    time = Time.current.to_i.to_s
     if count > 2
       (1..count-1).each do |idx|
         company_name = ((table.css('tr')[idx]).css('td')[1]).css('a').text
@@ -22,7 +24,11 @@ namespace :collect_sec_form do
         if saved_institution.length == 0
           institution = Institution.new(name: company_name, cik:cik, file_number:file_number, state:state, address: address)
           institution.save!
-          puts institution.name
+          new_institution_count += 1
+          puts "#{institution.name} #{new_institution_count}"
+          File.open("new_institution_#{time}.log", "a") { |f|
+            f.puts "#{institution.name} #{new_institution_count}"
+          }
         end
         form_html = ((second_table.css('tr')[3]).css('td')[2]).css('a')[0]['href']
         form_page = Nokogiri::HTML(open(host+form_html))
@@ -45,12 +51,26 @@ namespace :collect_sec_form do
             form = FormThirteen.new(filed_date:filed_date, form_type: "13F-HR", file_number: file_number, name_of_issue: issuer, title_of_class: title_class, cusip:cusip, value:value, shares_or_principle_amt: shares_or_principle_number, shares_or_principle:shares_or_principle, put_or_call:put_or_call, investment_desc:investment_discretion, other_manager:other_manager,sole_number:sole, shared_number:shared, none_number:none)
             form.save!
           end
+          puts "#{company_name} #{filed_date}"
+          File.open("thirteen_form_#{time}.log", "a") { |f|
+            f.puts "#{company_name} #{filed_date}"
+          }
         end
 
       end
 
     end
-
+    require 'aws-sdk'
+		["new_institution_#{time}.log","thirteen_form_#{time}.log"].each do |file_name|
+			if File.exist?(file_name)
+				s3 = Aws::S3::Resource.new(region: 'us-west-1')
+				File.open(Rails.root.join(file_name), 'r') do |file|
+						obj = s3.bucket('stocks-analyst-data').object(file_name)
+					obj.upload_file(file)
+					puts "Uploaded '%s' to S3!" % file_name
+				end
+			end
+		end
   end
 
 end
