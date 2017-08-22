@@ -1,9 +1,9 @@
 namespace :collect_sec_form do
   desc "Collect 13F-HR forms"
   task thirteen_form: :environment do
-    page_number = 81
+    page_number = 241
     host = "https://www.sec.gov/"
-    (1..49).each do |page|
+    (1..7).each do |page|
       url = "https://www.sec.gov/cgi-bin/srch-edgar?text=13F-HR&start=#{page_number.to_s}&count=80&first=2017&last=2017https://www.sec.gov/cgi-bin/srch-edgar?text=13F-HR&start=1&count=80&first=2017&last=2017"				
       page = Nokogiri::HTML(open(url))
       table = page.css("div > table")
