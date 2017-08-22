@@ -6,6 +6,6 @@ set :output, {:error => "log/cron_error_log.log", :standard => "log/cron_log.log
 #     rake "historical_data:collect_historical_data"
 # end
 
-every :day, :at => '12:45am' do
+every :day, :at => '1:15am' do
     rake "collect_sec_form:thirteen_form"
 end
