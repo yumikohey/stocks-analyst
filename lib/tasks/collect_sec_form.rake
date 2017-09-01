@@ -1,10 +1,14 @@
 namespace :collect_sec_form do
   desc "Collect 13F-HR forms"
   task thirteen_form: :environment do
-    page_number = 241
     host = "https://www.sec.gov/"
-    (1..7).each do |page|
-      url = "https://www.sec.gov/cgi-bin/srch-edgar?text=13F-HR&start=#{page_number.to_s}&count=80&first=2017&last=2017https://www.sec.gov/cgi-bin/srch-edgar?text=13F-HR&start=1&count=80&first=2017&last=2017"				
+    filed_date = Date.parse("2017-08-21")
+    form_type = "13F-HR"
+    start_year = "2016"
+    end_year = "2017"
+    (1..10).each do |page|
+      formatted_filed_date = filed_date.strftime("%m/%d/%Y")
+      url = "https://www.sec.gov/cgi-bin/srch-edgar?text=#{CGI.escape(formatted_filed_date)}+and+#{CGI.escape(form_type)}&first=#{start_year}&last=#{end_year}"				
       page = Nokogiri::HTML(open(url))
       table = page.css("div > table")
       count = table.css('tr').length
@@ -73,8 +77,18 @@ namespace :collect_sec_form do
           end
         end
       end
-      page_number += 80
+      
+      loop do
+        filed_date -= 1
+        if filed_date.saturday? or filed_date.sunday?
+          filed_date -= 1
+        else 
+          break
+        end
+      end
+
     end
+
   end
 
 end

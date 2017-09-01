@@ -25,3 +25,4 @@
 .aws
 .env
 stocks_development
+stocks_test
