@@ -27,7 +27,7 @@ module FormThirteensHelper
         }
     end
 
-    def goto_the_form(second_table, company_name)
+    def goto_the_form(second_table, company_name, file_number)
         host = "https://www.sec.gov/"
         form_html = ((second_table.css('tr')[3]).css('td')[2]).css('a')[0]['href']
         form_page = Nokogiri::HTML(open(host+form_html))
@@ -53,7 +53,7 @@ module FormThirteensHelper
             thirteen_form_filename = "#{Rails.env}_thirteen_form_#{@@time}.log"
             write_log_file(thirteen_form_filename, company_name, @@filed_date)
         end
-        puts "goto goto_the_form done"
+        puts "goto #{company_name} done"
     end
 
     def goto_institution_form_page(table, count)
@@ -72,13 +72,13 @@ module FormThirteensHelper
             saved_institution = Institution.where(cik:cik)
             forms_not_saved = true
             if saved_institution.length == 0
-                save_institution(company_name, cik, file_name, state, address)
+                save_institution(company_name, cik, file_number, state, address)
             else
                 saved_forms = FormThirteen.where(file_number:file_number, filed_date:@@filed_date).count()
                 forms_not_saved = saved_forms == 0
             end
             if forms_not_saved
-                goto_the_form(second_table, company_name)
+                goto_the_form(second_table, company_name, file_number)
             end
         end
         puts "goto institution form page done"
