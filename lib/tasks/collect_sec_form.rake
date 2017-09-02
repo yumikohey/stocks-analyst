@@ -8,7 +8,7 @@ namespace :collect_sec_form do
 		end_year = "2017"
 		time = Time.now.to_datetime.to_s
 		include FormThirteensHelper
-		(1..5).each do |page|
+		(1..30).each do |page|
       puts "!!!!!!!!!!!!!!!!!!!!!!!!!"
       puts filed_date
       puts "!!!!!!!!!!!!!!!!!!!!!!!!!"
