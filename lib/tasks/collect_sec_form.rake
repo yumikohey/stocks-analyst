@@ -2,20 +2,20 @@ namespace :collect_sec_form do
   desc "Collect 13F-HR forms"
   task thirteen_form: :environment do
     host = "https://www.sec.gov/"
-		filed_date = Date.parse("2017-08-14")
+		filed_date = Date.parse("2017-08-11")
 		form_type = "13F-HR"
 		start_year = "2016"
 		end_year = "2017"
 		time = Time.now.to_datetime.to_s
 		include FormThirteensHelper
-		(1..30).each do |page|
+		(1..10).each do |page|
       puts "!!!!!!!!!!!!!!!!!!!!!!!!!"
       puts filed_date
       puts "!!!!!!!!!!!!!!!!!!!!!!!!!"
 			formatted_filed_date = filed_date.strftime("%m/%d/%Y")
 				url = "https://www.sec.gov/cgi-bin/srch-edgar?text=#{CGI.escape(formatted_filed_date)}+and+#{CGI.escape(form_type)}&first=#{start_year}&last=#{end_year}"
 			puts url
-				webpage = navigate_to_a_page(url)
+				webpage = FormThirteensHelper.navigate_to_a_page(url)
 				puts "returned;"
 			table = webpage.css("div > table")
 			count = table.css('tr').length
